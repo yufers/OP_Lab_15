@@ -19,19 +19,28 @@ matrix *getMemArrayOfMatrices(int nMatrices, int nRows, int nCols) {
 }
 
 void freeMemMatrix(matrix *m) {
-    free(m);
+    for(int i = 0; i < m->nRows; i++) {
+        free(m->values[i]);
+    }
+
+    free(m->values);
+
+    m->values = NULL;
+    m->nRows = 0;
+    m->nCols = 0;
 }
 
 void freeMemMatrices(matrix *ms, int nMatrices) {
     for (int i = 0; i < nMatrices; i++) {
-        free(&ms[i]);
+        freeMemMatrix(&ms[i]);
     }
 }
 
 void inputMatrix(matrix *m) {
     for(int i = 0; i < m->nRows; i++) {
+        int *row = m->values[i];
         for(int j = 0; j < m->nCols; j++) {
-            scanf("%d", &m->values[i][j]);
+            scanf("%d", &row[j]);
         }
     }
 }
@@ -55,5 +64,24 @@ void outputMatrices(matrix *ms, int nMatrices) {
     for (int a = 0; a < nMatrices; a++) {
         outputMatrix(ms[a]);
         printf("\n");
+    }
+}
+
+void swapRows(matrix m, int i1, int i2) {
+    if ((i1 >= m.nRows) || (i2 >= m.nRows)) {
+        fprintf(stderr, "matrix index out of bounds");
+        exit(1);
+    }
+
+    int *temp = m.values[i1];
+    m.values[i1] = m.values[i2];
+    m.values[i2] = temp;
+}
+
+void swapColumns(matrix m, int j1, int j2) {
+    for (int i = 0; i < m.nCols; i++) {
+        int temp = m.values[i][j1];
+        m.values[i][j1] = m.values[i][j2];
+        m.values[i][j2] = temp;
     }
 }

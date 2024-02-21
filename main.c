@@ -2,246 +2,141 @@
 #include "libs/data_structures/vector/vector.h"
 #include "libs/data_structures/matrix/matrix.h"
 
-void test_createVector() {
-    vector vec = createVector(5);
+void fillMatrix(matrix *m, int start_value);
 
-    assert(vec.capacity == 5);
-    assert(vec.size == 0);
-    assert(vec.data != NULL);
+matrix test_getMemMatrix() {
+    matrix m = getMemMatrix(3, 3);
 
-    deleteVector(&vec);
+    assert(m.nCols == 3);
+    assert(m.nRows == 3);
 }
 
-void test_reserve() {
-    vector vec = createVector(5);
-    reserve(&vec, 8);
+matrix test_getMemArrayOfMatrices() {
+    matrix *ms = getMemArrayOfMatrices(3, 2, 2);
 
-    assert(vec.capacity == 8);
-    assert(vec.size == 0);
-    assert(vec.data != NULL);
-
-    reserve(&vec, 3);
-
-    assert(vec.capacity == 3);
-    assert(vec.size == 0);
-    assert(vec.data != NULL);
-
-    pushBack(&vec, 1);
-    pushBack(&vec, 2);
-    pushBack(&vec, 3);
-
-    reserve(&vec, 2);
-
-    assert(vec.capacity == 2);
-    assert(vec.size == 2);
-    assert(vec.data != NULL);
+    for (int i = 0; i < **ms->values; i++) {
+        assert(&ms[i] != NULL);
+        assert(&ms->values[i] != NULL);
+        assert(ms->nCols == 2);
+        assert(ms->nRows == 2);
+    }
 }
 
-void test_clear() {
-    vector vec = createVector(5);
+void test_freeMemMatrix() {
+    matrix m = getMemMatrix(3, 3);
 
-    pushBack(&vec, 1);
-    pushBack(&vec, 2);
-    pushBack(&vec, 3);
+    freeMemMatrix(&m);
 
-    assert(vec.capacity == 5);
-    assert(vec.size == 3);
-    assert(vec.data != NULL);
-
-    clear(&vec);
-
-    assert(vec.capacity == 5);
-    assert(vec.size == 0);
-    assert(vec.data != NULL);
+    assert(m.values == NULL);
+    assert(m.nRows == 0);
+    assert(m.nCols == 0);
 }
 
-void test_shrinkToFit() {
-    vector vec = createVector(6);
+void test_freeMemMatrices() {
+    matrix *ms = getMemArrayOfMatrices(3, 2, 2);
 
-    shrinkToFit(&vec);
+    freeMemMatrices(ms, 3);
 
-    assert(vec.capacity == 0);
-    assert(vec.size == 0);
-    assert(vec.data != NULL);
+    for (int i = 0; i < 3; i++) {
+        assert(ms[i].values == NULL);
+        assert(ms[i].nCols == 0);
+        assert(ms[i].nRows == 0);
+    }
 }
 
-void test_deleteVector() {
-    vector vec = createVector(6);
+void test_inputMatrix() {
+    matrix m = getMemMatrix(3, 3);
 
-    deleteVector(&vec);
+    inputMatrix(&m);
 
-    assert(vec.capacity == 0);
-    assert(vec.size == 0);
-    assert(vec.data == NULL);
-}
-//
-bool test_isEmpty() {
-    vector vec = createVector(6);
-
-    bool res = isEmpty(&vec);
-
-    assert(res);
+    for (int i = 0; i < m.nRows; i++) {
+        for (int j = 0; j < m.nCols; j++) {
+            assert(m.values != NULL);
+        }
+    }
 }
 
-bool test_isFull() {
-    vector vec = createVector(6);
+void test_inputMatrices() {
+    matrix *ms = getMemArrayOfMatrices(3, 2, 2);
 
-    bool res = isFull(&vec);
+    inputMatrices(ms, 3);
 
-    assert(!res);
+    for (int i = 0; i < ms->nRows; i++) {
+        for (int j = 0; j < ms->nCols; j++) {
+            assert(ms->values != NULL);
+        }
+    }
 }
 
-int test_getVectorValue() {
-    vector vec = createVector(6);
+void test_outputMatrix() {
+    matrix m = getMemMatrix(3, 3);
 
-    int x = 4;
+    fillMatrix(&m, 0);
 
-    pushBack(&vec, 1);
-    pushBack(&vec, 2);
-    pushBack(&vec, x);
-
-    int res = getVectorValue(&vec, 2);
-
-    assert(res == x);
+    outputMatrix(m);
 }
 
-void test_pushBack_emptyVector() {
-    vector vec = createVector(0);
+void test_outputMatrices() {
+    matrix *ms = getMemArrayOfMatrices(3, 2, 2);
 
-    assert(vec.capacity == 0);
-    assert(vec.size == 0);
-    assert(vec.data != NULL);
-
-    int x = 4;
-    pushBack(&vec, x);
-
-    assert(vec.capacity == 1);
-    assert(vec.size == 1);
-    assert(vec.data != NULL);
-
-    assert(vec.data[0] == 4);
+    for (int k = 0; k < 3; k++) {
+        fillMatrix(&ms[k], k*10);
+    }
+    outputMatrices(ms, 3);
 }
 
-void test_pushBack_fullVector() {
-    vector vec = createVector(2);
+void test_swapRows() {
+    matrix m = getMemMatrix(2, 2);
 
-    assert(vec.capacity == 2);
-    assert(vec.size == 0);
-    assert(vec.data != NULL);
+    fillMatrix(&m, 0);
 
-    int x = 4;
-    pushBack(&vec, 1);
-    pushBack(&vec, x);
+    int *temp = m.values[0];
 
-    assert(vec.capacity == 2);
-    assert(vec.size == 2);
-    assert(vec.data != NULL);
+    swapRows(m, 0, 1);
 
-    assert(vec.data[1] == x);
-
-    int y = 5;
-    pushBack(&vec, y);
-
-    assert(vec.capacity == 4);
-    assert(vec.size == 3);
-    assert(vec.data != NULL);
-
-    assert(vec.data[2] == y);
+    assert(m.values[0] != temp);
 }
 
-void test_popBack() {
-    vector vec = createVector(0);
-    pushBack(&vec, 10);
+void test_swapColumns() {
+    matrix m = getMemMatrix(4, 4);
 
-    assert(vec.size == 1);
+    fillMatrix(&m, 0);
 
-    popBack(&vec);
+    outputMatrix(m);
 
-    assert(vec.size == 0);
-    assert(vec.capacity == 1);
+    int *temp = m.values[0];
+
+    swapColumns(m, 1, 3);
+
+    outputMatrix(m);
+
+    assert(m.values[1] != temp);
+
 }
 
-void test_atVector_notEmptyVector() {
-    vector vec = createVector(5);
-    int val = 3;
-    pushBack(&vec, 1);
-    pushBack(&vec, 2);
-    pushBack(&vec, val);
-    pushBack(&vec, 4);
-    pushBack(&vec, 5);
-
-    assert(vec.size > 0);
-
-    int *res = atVector(&vec, 2);
-
-    assert(val == *res);
-}
-
-void test_atVector_requestToLastElement() {
-    vector vec = createVector(5);
-    int val = 5;
-    pushBack(&vec, 1);
-    pushBack(&vec, 2);
-    pushBack(&vec, 3);
-    pushBack(&vec, 4);
-    pushBack(&vec, val);
-
-    int *res = atVector(&vec, 4);
-
-    assert(val == *res);
-}
-
-void test_back_oneElementInVector() {
-    vector vec = createVector(1);
-
-    pushBack(&vec, 1);
-    pushBack(&vec, 2);
-
-    int *res = back(&vec);
-
-    assert(&vec.data[1] == res);
-}
-
-void test_front_oneElementInVector() {
-    vector vec = createVector(1);
-
-    pushBack(&vec, 1);
-    pushBack(&vec, 2);
-
-    int *res = front(&vec);
-
-    assert(&vec.data[0] == res);
+void fillMatrix(matrix *m, int start_value) {
+    for (int i = 0; i < (*m).nRows; i++) {
+        for (int j = 0; j < (*m).nCols; j++) {
+            (*m).values[i][j] = i + j + start_value;
+        }
+    }
 }
 
 void test() {
-    test_createVector();
-    test_reserve();
-    test_clear();
-    test_shrinkToFit();
-    test_deleteVector();
-    test_isEmpty();
-    test_isFull();
-    test_getVectorValue();
-    test_pushBack_emptyVector();
-    test_pushBack_fullVector();
-    test_popBack();
-    test_atVector_notEmptyVector();
-    test_atVector_requestToLastElement();
-    test_back_oneElementInVector();
-    test_front_oneElementInVector();
+    test_getMemMatrix();
+    test_getMemArrayOfMatrices();
+    test_freeMemMatrix();
+    test_freeMemMatrices();
+    //test_inputMatrix();
+    //test_inputMatrices();
+    test_outputMatrix();
+    test_outputMatrices();
+    test_swapRows();
+    test_swapColumns();
 }
 
 int main() {
-//    test();
-
-    matrix m = getMemMatrix(3, 3);
-    matrix *ms = getMemArrayOfMatrices(3, 2, 2);
-
-//    inputMatrix(&m);
-//    outputMatrix(m);
-
-    inputMatrices(ms, 3);
-    outputMatrices(ms, 3);
+    test();
 
     return 0;
 }
