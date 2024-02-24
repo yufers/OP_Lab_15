@@ -28,6 +28,8 @@ void inputMatrix(matrix *m);
 
 void outputMatrix(matrix m);
 
+void outputMatrixSum(matrix m, bool showSum);
+
 void inputMatrices(matrix *ms, int nMatrices);
 
 void outputMatrices(matrix *ms, int nMatrices);
@@ -35,5 +37,14 @@ void outputMatrices(matrix *ms, int nMatrices);
 void swapRows(matrix m, int i1, int i2);
 
 void swapColumns(matrix m, int j1, int j2);
+
+int getSum(int *a, int n);
+int getSumCol(int **values, int nRows, int n);
+
+void insertionSortRowsMatrixByRowCriteria(matrix m, int (*criteria)(int*, int));
+
+void selectionSortColsMatrixByColCriteria(matrix m, int (*criteria)(int*, int));
+
+bool isSquareMatrix(matrix *m);
 
 #endif //LAB_MATRIX_H

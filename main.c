@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <time.h>
+#include <stdlib.h>
 #include "libs/data_structures/vector/vector.h"
 #include "libs/data_structures/matrix/matrix.h"
 
@@ -80,7 +82,7 @@ void test_outputMatrices() {
     matrix *ms = getMemArrayOfMatrices(3, 2, 2);
 
     for (int k = 0; k < 3; k++) {
-        fillMatrix(&ms[k], k*10);
+        fillMatrix(&ms[k], k * 10);
     }
     outputMatrices(ms, 3);
 }
@@ -122,6 +124,15 @@ void fillMatrix(matrix *m, int start_value) {
     }
 }
 
+void fillRandomMatrix(matrix *m, int start_value) {
+    for (int i = 0; i < (*m).nRows; i++) {
+        for (int j = 0; j < (*m).nCols; j++) {
+            int r = rand();
+            (*m).values[i][j] = r;
+        }
+    }
+}
+
 void test() {
     test_getMemMatrix();
     test_getMemArrayOfMatrices();
@@ -136,7 +147,25 @@ void test() {
 }
 
 int main() {
-    test();
+    srand(time(NULL));
+    //test();
+
+    if (false) {
+        matrix m = getMemMatrix(4, 4);
+        fillRandomMatrix(&m, 3);
+        outputMatrixSum(m, true);
+        printf("------------\n");
+        insertionSortRowsMatrixByRowCriteria(m, &getSum);
+        outputMatrixSum(m, true);
+    }
+
+    matrix m = getMemMatrix(4, 4);
+    fillRandomMatrix(&m, 3);
+    outputMatrixSum(m, true);
+    printf("------------\n");
+    selectionSortColsMatrixByColCriteria(m, &getSum);
+    outputMatrixSum(m, true);
+
 
     return 0;
 }
