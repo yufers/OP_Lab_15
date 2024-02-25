@@ -150,21 +150,21 @@ int main() {
     srand(time(NULL));
     //test();
 
-    if (false) {
-        matrix m = getMemMatrix(4, 4);
-        fillRandomMatrix(&m, 3);
-        outputMatrixSum(m, true);
-        printf("------------\n");
-        insertionSortRowsMatrixByRowCriteria(m, &getSum);
-        outputMatrixSum(m, true);
-    }
+//    matrix m = getMemMatrix(4, 4);
+//    fillRandomMatrix(&m, 3);
+//    outputMatrixSum(m, true);
+//    printf("------------\n");
+//    insertionSortRowsMatrixByRowCriteria(m, &getSum);
+//    outputMatrixSum(m, true);
+//
+//
+//    matrix m = getMemMatrix(4, 4);
+//    fillRandomMatrix(&m, 3);
+//    outputMatrixSum(m, true);
+//    printf("------------\n");
+//    selectionSortColsMatrixByColCriteria(m, &getSum);
+//    outputMatrixSum(m, true);
 
-    matrix m = getMemMatrix(4, 4);
-    fillRandomMatrix(&m, 3);
-    outputMatrixSum(m, true);
-    printf("------------\n");
-    selectionSortColsMatrixByColCriteria(m, &getSum);
-    outputMatrixSum(m, true);
 
 
     return 0;
