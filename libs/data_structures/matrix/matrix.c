@@ -276,7 +276,38 @@ void transposeMatrix(matrix *m) {
             m_new.values[i][j] = m->values[j][i];
         }
     }
-
     freeMemMatrix(m);
     *m = m_new;
+}
+
+position getMinValuePos(matrix m) {
+    position pos = {-1, -1};
+
+    int min = INT_MAX;
+    for (int i = 0; i < m.nRows; i++) {
+        for (int j = i; j < m.nCols; j++) {
+            if (m.values[i][j] < min) {
+                min = m.values[i][j];
+                pos.rowIndex = i;
+                pos.colIndex = j;
+            }
+        }
+    }
+    return pos;
+}
+
+position getMaxValuePos(matrix m) {
+    position pos = {1, 1};
+
+    int max = INT_MIN;
+    for (int i = 0; i < m.nRows; i++) {
+        for (int j = i; j < m.nCols; j++) {
+            if (m.values[i][j] > max) {
+                max = m.values[i][j];
+                pos.rowIndex = i;
+                pos.colIndex = j;
+            }
+        }
+    }
+    return pos;
 }
