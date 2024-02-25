@@ -53,4 +53,9 @@ bool isEMatrix(matrix *m);
 
 bool isSymmetricMatrix(matrix *m);
 
+void transposeSquareMatrix(matrix *m);
+
+void transposeMatrix(matrix *m);
+
+
 #endif //LAB_MATRIX_H
